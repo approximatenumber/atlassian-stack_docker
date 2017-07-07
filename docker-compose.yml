@@ -1,0 +1,108 @@
+version: '2'
+services:
+
+  letsencrypt:
+    build: ./letsencrypt
+    command: /bin/true
+    volumes:
+      - letsencrypt_certs:/etc/letsencrypt
+      - letsencrypt_www:/var/www/letsencrypt
+
+  nginx:
+     container_name: nginx
+     image: nginx:stable
+     volumes:
+       - letsencrypt_certs:/etc/nginx/certs
+       - letsencrypt_www:/var/www/letsencrypt
+       - ./nginx/conf.d:/etc/nginx/conf.d
+       - ./nginx/html:/var/www/html
+     ports:
+       - 80:80
+       - 443:443
+     restart: always
+
+  db:
+     build: ./db
+     container_name: db
+     ports:
+      - 5432:5432
+     volumes:
+      - postgres-data:/var/lib/postgresql
+
+  jira:
+    image: cptactionhank/atlassian-jira-software:7.4.0
+    container_name: jira
+    ports:
+     - 8080:8080
+    volumes:
+     - jira-home:/var/atlassian/jira
+     - jira-install:/opt/atlassian/jira
+    depends_on:
+     - db
+
+  confluence:
+    image: mminks/docker-oracle-jdk-confluence:5.10
+    container_name: confluence
+    ports:
+     - 8090:8090
+    volumes:
+     - confluence-home:/var/atlassian/confluence
+     - confluence-install:/opt/atlassian/confluence
+    depends_on:
+     - db
+
+  bitbucket:
+    image: cptactionhank/atlassian-bitbucket:4.0.2
+    container_name: bitbucket
+    ports:
+     - 7990:7990
+    volumes:
+     - bitbucket-home:/var/atlassian/bitbucket
+     - bitbucket-install:/opt/atlassian/bitbucket
+    depends_on:
+     - db
+
+  mail:
+    image: tvial/docker-mailserver:latest
+    hostname: mail
+    domainname: domain.com
+    container_name: mail
+    ports:
+    - 25:25
+    volumes:
+    - maildata:/var/mail
+    - mailstate:/var/mail-state
+    - ./mail/config/:/tmp/docker-mailserver
+    - letsencrypt_certs:/etc/letsenrypt
+    environment:
+    - SSL_TYPE=letsencrypt
+    - SMTP_ONLY
+    - ONE_DIR=1
+    - PERMIT_DOCKER=network
+
+volumes:
+  jira-home:
+    external: True
+  jira-install:
+    external: True
+
+  confluence-home:
+    external: True
+  confluence-install:
+    external: True
+
+  bitbucket-home:
+    external: True
+  bitbucket-install:
+    external: True
+
+  postgres-data:
+    external: True
+
+  letsencrypt_certs: ~
+  letsencrypt_www: ~
+
+  maildata:
+    driver: local
+  mailstate:
+    driver: local

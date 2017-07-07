@@ -1,0 +1,46 @@
+/* taken from https://codepen.io/pirrera/pen/dbHvD */
+
+@import "compass/css3";
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:300);
+@mixin underline($pos, $width, $color:rgba(0,0,0,1), $bg:rgb(0,0,0) ) {
+  @include background-image(linear-gradient(top,
+    rgba($background,0) $pos,
+    $color $pos,
+    $color $pos+$width,
+    rgba($background,0) $pos+$width
+   )
+  );
+  display: inline-block;
+  background-size: 2px 2em;
+  background-repeat: repeat-x;
+  /* Set your wanted text-shadow here */
+  text-shadow:
+   2px  2px 0px $background,
+   2px -2px 0px $background,
+  -2px  2px 0px $background,
+  -2px -2px 0px $background,
+   0px  2px 0px $background,
+   0px -2px 0px $background;
+}
+
+$tcolor: rgba(35,35,35,0.8); /* textcolor */
+$uline: rgba(255,255,255,1); /* underline color */
+$background: rgba(41, 128, 185,1.0); /* background color */
+
+body {
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+  background-color: $background;
+  margin:0;
+}
+.text {
+  color: $tcolor;
+  font-size: 3em;
+  font-family: "Open Sans", sans-serif;
+  font-style: normal;
+}
