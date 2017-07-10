@@ -2,9 +2,9 @@
 
 ##### Export your site name and email
 
-`export MY_SITE="domain.com"`
+`export my_site="domain.com"`
 
-`export MY_EMAIL="my@domain.com"`
+`export my_email="my@domain.com"`
 
 ##### Build LetsEncrypt with dummy certificate
 
@@ -12,11 +12,11 @@
 
 ##### Configure nginx config and index page
 
-`sed -i "s/domain.com/${MY_SITE}/g" nginx/conf.d_dummy/nginx_dummy.conf`
+`sed -i "s/domain.com/${my_site}/g" nginx/conf.d_dummy/nginx_dummy.conf`
 
-`sed -i "s/domain.com/${MY_SITE}/g" nginx/conf.d/atlassian.conf`
+`sed -i "s/domain.com/${my_site}/g" nginx/conf.d/atlassian.conf`
 
-`sed -i "s/domain.com/${MY_SITE}/g" nginx/html/index.html`
+`sed -i "s/domain.com/${my_site}/g" nginx/html/index.html`
 
 ##### Start nginx with dummy certificate
 
@@ -27,8 +27,8 @@
 ```bash
 docker-compose run --rm letsencrypt \
   letsencrypt certonly --webroot \
-  --email ${MY_EMAIL} --agree-tos \
-  -w /var/www/letsencrypt -d ${MY_SITE}
+  --email ${my_email} --agree-tos \
+  -w /var/www/letsencrypt -d ${my_site}
 ```
 ##### Stop them
 
@@ -47,7 +47,7 @@ docker-compose run --rm letsencrypt \
 ```bash
 for service_ in jira confluence bitbucket; do
     docker run --rm \
-        -e MAIL_USER=${service_}@${MY_SITE} \
+        -e MAIL_USER=${service_}@${my_site} \
         -e MAIL_PASS=VerySecurePassword \
         -ti tvial/docker-mailserver:latest \
         /bin/sh -c 'echo "$MAIL_USER|$(doveadm pw -s SHA512-CRYPT -u $MAIL_USER -p $MAIL_PASS)"' >> config/postfix-accounts.cf
