@@ -61,3 +61,5 @@ Let\`s start all services with
 `docker-compose up`
 
 and check the log messages!
+
+_Thanks to all container images I used here._
