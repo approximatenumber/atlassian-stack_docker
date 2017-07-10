@@ -65,7 +65,7 @@ services:
   mail:
     image: tvial/docker-mailserver:latest
     hostname: mail
-    domainname: domain.com
+    domainname: ${my_site}
     container_name: mail
     ports:
     - 25:25
