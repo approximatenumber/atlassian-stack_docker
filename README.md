@@ -45,7 +45,6 @@ docker-compose run --rm letsencrypt \
 (you can change passwords)
 
 ```bash
-mkdir mail/config
 for service_ in jira confluence bitbucket; do
     docker run --rm \
         -e MAIL_USER=${service_}@${MY_SITE} \
