@@ -1,0 +1,25 @@
+version: '2'
+services:
+
+  letsencrypt:
+    build: ./letsencrypt
+    command: /bin/true
+    volumes:
+      - letsencrypt_certs:/etc/letsencrypt
+      - letsencrypt_www:/var/www/letsencrypt
+
+  nginx:
+     container_name: nginx
+     image: nginx:stable
+     volumes:
+       - letsencrypt_certs:/etc/nginx/certs
+       - letsencrypt_www:/var/www/letsencrypt
+       - ./nginx/conf.d_dummy:/etc/nginx/conf.d
+     ports:
+       - 80:80
+       - 443:443
+     restart: always
+
+volumes:
+  letsencrypt_certs: ~
+  letsencrypt_www: ~
