@@ -60,6 +60,8 @@ Let\`s start all services with
 
 `docker-compose up`
 
-and check the log messages!
+and check the log messages.
+
+If everything is ok, you can access `$MY_SITE/jira`, `$MY_SITE/confluence` and `$MY_SITE/bitbucket`.
 
 _Thanks to all container images I used here._
